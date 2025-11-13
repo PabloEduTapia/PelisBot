@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>PelisBot – Typebot & Botpress</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #050816;
+      color: #f5f5f5;
+    }
+
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      display: flex;
+      background: #0b1220;
+      border-bottom: 1px solid #1f2937;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      border: none;
+      background: transparent;
+      color: #9ca3af;
+      cursor: pointer;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .tab-btn span.emoji {
+      font-size: 1.1rem;
+    }
+
+    .tab-btn.active {
+      background: #111827;
+      color: #f9fafb;
+      border-bottom: 2px solid #6366f1;
+    }
+
+    .tab-btn:not(.active):hover {
+      background: #111827;
+      color: #e5e7eb;
+    }
+
+    main {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tab-panel {
+      position: absolute;
+      inset: 0;
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .tab-panel iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    typebot-standard {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header>
+      <button class="tab-btn active" data-tab="typebot">
+        <span class="emoji">🎬</span>
+        <span>Bot Typebot</span>
+      </button>
+      <button class="tab-btn" data-tab="botpress">
+        <span class="emoji">🤖</span>
+        <span>Bot Botpress</span>
+      </button>
+    </header>
+
+    <main>
+      <!-- TAB: TYPEBOT -->
+      <section id="tab-typebot" class="tab-panel active">
+        <typebot-standard style="height: 100%;"></typebot-standard>
+      </section>
+
+      <!-- TAB: BOTPRESS -->
+      <section id="tab-botpress" class="tab-panel">
+        <!-- Tu Botpress en modo full-page -->
+        <iframe
+          src="https://cdn.botpress.cloud/webchat/v3.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/11/11/22/20251111221236-8PKH5L7W.json"
+        ></iframe>
+      </section>
+    </main>
+  </div>
+
+  <!-- Script de tabs -->
+  <script>
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const tabPanels = {
+      typebot: document.getElementById("tab-typebot"),
+      botpress: document.getElementById("tab-botpress"),
+    };
+
+    tabButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const tabName = btn.getAttribute("data-tab");
+
+        tabButtons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        Object.keys(tabPanels).forEach((key) => {
+          tabPanels[key].classList.remove("active");
+        });
+        tabPanels[tabName].classList.add("active");
+      });
+    });
+  </script>
+
+  <!-- Script de Typebot -->
+  <script>
+    const typebotInitScript = document.createElement("script");
+    typebotInitScript.type = "module";
+    typebotInitScript.innerHTML = `
+      import Typebot from 'https://cdn.jsdelivr.net/npm/@typebot.io/js@latest/dist/web.js';
+      Typebot.initStandard({ typebot: "my-typebot-u2bycnk" });
+    `;
+    document.body.append(typebotInitScript);
+  </script>
+
+</body>
+</html>
